@@ -2,7 +2,7 @@
 
 중학교 「삼각형의 합동의 활용」 유형을 **단일 HTML 파일**로 정리한 오답노트. 문항·그림·풀이 모두 직접 만든 자작 자료입니다.
 
-**👉 [바로 열기](https://hong-jame.github.io/triangle-congruence-notes/오답노트.html)**
+**👉 [바로 열기](https://hong-jame.github.io/triangle-congruence-notes/)**
 
 ## 수록 문항
 
@@ -41,7 +41,7 @@ python build.py      # 데이터.json + 그림/ -> 오답노트.html (그림을 
 
 | 파일 | 역할 |
 |---|---|
-| `오답노트.html` | **결과물.** 그림까지 박힌 단일 파일 |
+| `오답노트.html` | **결과물.** 그림까지 박힌 단일 파일 (`index.html`은 Pages 루트용 사본) |
 | `데이터.json` | 문항 원본 데이터 |
 | `템플릿.html` | UI/스크립트. `/*__DATA__*/[]` 자리에 데이터 주입 |
 | `build.py` | 데이터.json + 그림/ → 오답노트.html |

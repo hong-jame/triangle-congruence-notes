@@ -13,6 +13,8 @@ BASE = Path(__file__).resolve().parent
 DATA = BASE / "데이터.json"
 TPL = BASE / "템플릿.html"
 OUT = BASE / "오답노트.html"
+# GitHub Pages가 루트 주소에서 바로 열어주도록 같은 내용을 index.html로도 내보낸다
+OUT_INDEX = BASE / "index.html"
 MARK = "/*__DATA__*/"
 
 
@@ -59,8 +61,11 @@ def main() -> int:
         return 1
 
     payload = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")
-    OUT.write_text(tpl.replace(MARK + "[]", payload), encoding="utf-8")
+    html = tpl.replace(MARK + "[]", payload)
+    OUT.write_text(html, encoding="utf-8")
+    OUT_INDEX.write_text(html, encoding="utf-8")
     print(f"\n완성: {OUT.name} ({OUT.stat().st_size / 1024:.0f} KB)")
+    print(f"      {OUT_INDEX.name} (Pages 루트용 사본)")
     return 0
 
 
