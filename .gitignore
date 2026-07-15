@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+# 교재 원본 사진은 저장소에 넣지 않는다 (저작권)
+*.jpg
+*.jpeg
+*.JPG
+*.PNG
+rot.png

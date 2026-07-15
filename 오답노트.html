@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="referrer" content="no-referrer">
+<title>삼각형의 합동 오답노트</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --line:#e3e6ea; --ink:#1b1f24; --dim:#6b7480;
+    --accent:#2f6fd0; --accent-soft:#eaf1fc; --ok:#1f9254; --ok-soft:#e8f6ee;
+    --warn:#a86b00; --warn-soft:#fdf3e0; --tag:#eef1f5;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+    font-size:16px;line-height:1.65;
+    -webkit-text-size-adjust:100%;}
+  .wrap{max-width:940px;margin:0 auto;padding:24px 18px 80px}
+
+  header h1{margin:0 0 4px;font-size:26px;letter-spacing:-.5px}
+  header p{margin:0;color:var(--dim);font-size:14px}
+
+  .bar{position:sticky;top:0;z-index:5;background:var(--bg);
+    padding:14px 0 12px;margin:18px 0 20px;border-bottom:1px solid var(--line)}
+  .bar-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  #q{flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--line);
+    border-radius:8px;font-size:15px;background:var(--card);color:var(--ink)}
+  .btn{padding:8px 13px;border:1px solid var(--line);background:var(--card);
+    color:var(--ink);border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .tagbtn{padding:4px 10px;border-radius:999px;border:1px solid var(--line);
+    background:var(--tag);font-size:13px;cursor:pointer;color:var(--dim);font-family:inherit}
+  .tagbtn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .count{color:var(--dim);font-size:13px;margin-top:10px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:20px 22px;margin-bottom:18px}
+  .card.done{border-color:var(--ok);background:var(--ok-soft)}
+  .head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .num{font-weight:700;font-size:19px;letter-spacing:.5px}
+  .chip{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--tag);color:var(--dim)}
+  .head .sp{flex:1}
+  .chk{font-size:13px;color:var(--dim);display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
+
+  .body{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+  .qtext{flex:1;min-width:260px;margin:0;font-size:17px}
+  .fig{flex:0 0 auto;max-width:340px}
+  .fig img{display:block;max-width:100%;height:auto;border:1px solid var(--line);border-radius:8px}
+
+  .note{margin-top:12px;padding:9px 12px;border-radius:8px;background:var(--warn-soft);
+    color:var(--warn);font-size:13px;border:1px solid #f0dcb4}
+
+  .reveal{margin-top:16px}
+  .sol{margin-top:14px;padding-top:16px;border-top:1px dashed var(--line)}
+  .ans{display:inline-block;background:var(--accent-soft);color:var(--accent);
+    font-weight:700;padding:6px 14px;border-radius:8px;margin-bottom:12px}
+  ol.steps{margin:0;padding-left:22px}
+  ol.steps li{margin-bottom:9px}
+  .key{margin-top:14px;padding:11px 14px;background:var(--accent-soft);
+    border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:15px}
+  .key b{color:var(--accent)}
+
+  /* ── 유사문제 ─────────────────────────────── */
+  .simWrap{margin-top:16px}
+  .sims{margin-top:12px}
+  .sim{border:1px solid var(--line);border-radius:10px;padding:15px 16px;margin-bottom:12px;
+    background:var(--bg)}
+  .sim.right{border-color:var(--ok);background:var(--ok-soft)}
+  .sim.wrong{border-color:#e0a0a0;background:#fdf0f0}
+  .simTop{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+  .simNo{font-weight:700;font-size:14px;color:var(--dim)}
+  .simMark{font-size:15px;font-weight:700}
+  .simMark.o{color:var(--ok)}
+  .simMark.x{color:#c0392b}
+  .simRow{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  .simIn{width:110px;padding:8px 11px;border:1px solid var(--line);border-radius:8px;
+    font-family:inherit;font-size:15px;background:var(--card);color:var(--ink)}
+  .simIn:focus{outline:none;border-color:var(--accent)}
+  .simUnit{font-size:14px;color:var(--dim);margin-left:-2px}
+  .simSol{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:15px}
+  .simSol ol{margin:8px 0 0;padding-left:20px}
+  .simSol li{margin-bottom:7px}
+
+  .memo{margin-top:16px}
+  .memo label{display:block;font-size:13px;color:var(--dim);margin-bottom:6px}
+  .memo textarea{width:100%;min-height:62px;padding:10px 12px;border:1px solid var(--line);
+    border-radius:8px;font-family:inherit;font-size:14px;resize:vertical;
+    background:var(--card);color:var(--ink);line-height:1.55}
+  .memo textarea:focus{outline:none;border-color:var(--accent)}
+  .saved{font-size:12px;color:var(--ok);margin-left:6px}
+
+  .empty{text-align:center;color:var(--dim);padding:60px 0}
+
+  /* ── 모바일 ───────────────────────────────── */
+  @media (max-width:640px){
+    .wrap{padding:16px 12px 56px}
+    header h1{font-size:21px}
+    header p{font-size:13px}
+
+    /* 좁은 화면에선 고정 해제 — 문제 읽을 세로 공간이 우선 */
+    .bar{position:static;padding:10px 0 8px;margin:14px 0 14px}
+    .bar-row{gap:6px}
+    /* 검색창은 한 줄 전체, 16px라야 iOS가 확대 안 함 */
+    #q{flex:1 1 100%;min-width:0;font-size:16px;padding:11px 12px}
+    .btn{flex:1 1 0;font-size:13px;padding:10px 8px;white-space:nowrap}
+    /* 인쇄는 모바일에서 안 씀 */
+    #printQ,#printA{display:none}
+    /* 태그는 줄바꿈 대신 가로 스크롤 */
+    .tags{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+      margin-top:8px;padding-bottom:2px}
+    .tags::-webkit-scrollbar{display:none}
+    .tagbtn{flex:0 0 auto;padding:7px 13px}
+    .count{margin-top:8px;font-size:12px}
+
+    .card{padding:16px 14px;border-radius:10px;margin-bottom:14px}
+    .head{gap:7px;margin-bottom:10px}
+    .num{font-size:18px}
+    .head .sp{flex:1 0 100%;height:0}
+    .body{gap:14px}
+    .qtext{font-size:16px;min-width:0;flex:1 1 100%}
+    .fig{width:100%;margin:0 auto}
+    .memo textarea{font-size:16px}
+    .chk{padding:2px 0}
+    .sim{padding:14px 12px}
+    /* 답 칸도 16px — iOS 확대 방지 */
+    .simIn{font-size:16px;flex:1 1 90px;min-width:0;padding:10px 11px}
+    .simRow .btn{flex:0 0 auto}
+  }
+
+  @media print{
+    :root{--bg:#fff}
+    .bar,.memo,.reveal,.chk,.simRow,.simToggle,.simMark{display:none !important}
+    /* 유사문제는 인쇄에 늘 포함하되, 풀이는 「해설까지」에서만 */
+    .sims{display:block !important}
+    .sim{break-inside:avoid;page-break-inside:avoid;background:#fff !important;
+      border-color:#ccc !important}
+    body.print-q .simSol{display:none !important}
+    body.print-a .simSol{display:block !important}
+    body{font-size:11pt}
+    .wrap{max-width:none;padding:0}
+    .card{break-inside:avoid;page-break-inside:avoid;border:1px solid #ccc;
+      margin-bottom:12px;background:#fff !important}
+    .note{display:none}
+    body.print-q .sol{display:none !important}
+    body.print-a .sol{display:block !important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>삼각형의 합동 오답노트</h1>
+    <p>문제를 먼저 스스로 풀고 <b>정답 확인</b>을 눌러 비교해 보세요. 메모는 이 브라우저에 자동 저장됩니다.</p>
+  </header>
+
+  <div class="bar">
+    <div class="bar-row">
+      <input id="q" type="search" placeholder="문제 내용, 번호, 태그로 검색">
+      <button class="btn" id="toggleAll">해설 모두 펼치기</button>
+      <button class="btn" id="hideDone">복습 완료 숨기기</button>
+      <button class="btn" id="printQ">🖨 문제만</button>
+      <button class="btn" id="printA">🖨 해설까지</button>
+    </div>
+    <div class="tags" id="tagbar"></div>
+    <div class="count" id="count"></div>
+  </div>
+
+  <main id="list"></main>
+</div>
+
+<script>
+const DATA = [{"id": "01", "출처": "자작 문항 · 유형 「삼각형의 합동의 활용」", "날짜": "2026-07-15", "태그": ["평면도형", "삼각형의 합동", "이등변삼각형"], "문제": "아래 그림과 같이 CA = CB 인 이등변삼각형 ABC와 CD = CE 인 이등변삼각형 DEC가 꼭짓점 C에서 맞물려 있다. ∠ACB = ∠DCE = 50° 이고, 네 점 A, D, P, E 가 한 직선 위에 있을 때 ∠BEC 의 크기를 구하여라.", "그림": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjI1IDYwIDM5MCA0MDgiIHdpZHRoPSIzOTAiIGhlaWdodD0iNDA4IiByb2xlPSJpbWciPjxsaW5lIHgxPSIxNzcuMiIgeTE9IjEwMC4yIiB4Mj0iNzAuMCIgeTI9IjMzMC4wIiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iNzAuMCIgeTE9IjMzMC4wIiB4Mj0iMzcwLjAiIHkyPSIzMzAuMCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjM3MC4wIiB5MT0iMzMwLjAiIHgyPSIxNzcuMiIgeTI9IjEwMC4yIiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMzcwLjAiIHkxPSIzMzAuMCIgeDI9IjIzNi43IiB5Mj0iMzA4LjciIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIzNzAuMCIgeTE9IjMzMC4wIiB4Mj0iMjY4LjAiIHkyPSI0MTguNCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjE3Ny4yIiB5MT0iMTAwLjIiIHgyPSIyNjguMCIgeTI9IjQxOC40IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iNzAuMCIgeTE9IjMzMC4wIiB4Mj0iMjY4LjAiIHkyPSI0MTguNCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjI3OC45IiB5MT0iMjEwLjYiIHgyPSIyNjguMiIgeTI9IjIxOS42IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIyMjAuMCIgeTE9IjMyMy4wIiB4Mj0iMjIwLjAiIHkyPSIzMzcuMCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMTE3LjIiIHkxPSIyMTIuMSIgeDI9IjEyOS45IiB5Mj0iMjE4LjEiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjMwNy45IiB5MT0iMzEzLjAiIHgyPSIzMDUuNyIgeTI9IjMyNi44IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIzMDEuMCIgeTE9IjMxMS45IiB4Mj0iMjk4LjgiIHkyPSIzMjUuNyIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMzE3LjEiIHkxPSIzNjYuNiIgeDI9IjMyNi4yIiB5Mj0iMzc3LjIiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjMxMS44IiB5MT0iMzcxLjIiIHgyPSIzMjAuOSIgeTI9IjM4MS44IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIyNDQuNyIgeTE9IjM2Mi4xIiB4Mj0iMjU4LjEiIHkyPSIzNTguMyIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMjQ2LjYiIHkxPSIzNjguOSIgeDI9IjI2MC4wIiB5Mj0iMzY1LjAiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTSAyNDQuMyA0MDcuOCBBIDI2IDI2IDAgMCAxIDI4Ny43IDQwMS40IiBmaWxsPSJub25lIiBzdHJva2U9IiNjMjQxMGMiIHN0cm9rZS13aWR0aD0iMi41Ii8+PGNpcmNsZSBjeD0iMTc3LjIiIGN5PSIxMDAuMiIgcj0iMy40IiBmaWxsPSIjMWIxZjI0Ii8+PGNpcmNsZSBjeD0iNzAuMCIgY3k9IjMzMC4wIiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIzNzAuMCIgY3k9IjMzMC4wIiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIyMzYuNyIgY3k9IjMwOC43IiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIyNjguMCIgY3k9IjQxOC40IiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIyNDIuOCIgY3k9IjMzMC4wIiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48dGV4dCB4PSIxNjkuMiIgeT0iODYuMiIgZm9udC1mYW1pbHk9IlRpbWVzIE5ldyBSb21hbixzZXJpZiIgZm9udC1zaXplPSIyNiIgZm9udC1zdHlsZT0iaXRhbGljIiBmaWxsPSIjMWIxZjI0Ij5BPC90ZXh0Pjx0ZXh0IHg9IjQwLjAiIHk9IjMzOC4wIiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkI8L3RleHQ+PHRleHQgeD0iMzgyLjAiIHk9IjMzOC4wIiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkM8L3RleHQ+PHRleHQgeD0iMjA2LjciIHk9IjMwMC43IiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkQ8L3RleHQ+PHRleHQgeD0iMjYyLjAiIHk9IjQ1Mi40IiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkU8L3RleHQ+PHRleHQgeD0iMjE2LjgiIHk9IjM1NC4wIiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPlA8L3RleHQ+PC9zdmc+", "정답": "115°", "풀이": ["두 이등변삼각형이 꼭짓점 C에서 맞물려 있고, 꼭지각도 50°로 서로 같아. 이런 그림이 나오면 십중팔구 '합동인 삼각형 한 쌍 찾기'가 열쇠야. 구하라는 ∠BEC를 E에서 바로 재려고 하면 E 주변엔 쓸 수 있는 정보가 없어서 막히거든.", "찾을 짝은 △ACD 와 △BCE 야. C를 중심으로 △ACD를 50° 돌리면 △BCE에 포개진다고 생각하면 돼. 합동 조건 세 개를 하나씩 확인해보자.", "① CA = CB — 문제에 주어졌어.", "② CD = CE — 이것도 주어졌고.", "③ ∠ACD = ∠BCE — 여기가 핵심이야. ∠ACD = ∠ACB − ∠DCB = 50° − ∠DCB 이고, ∠BCE = ∠DCE − ∠DCB = 50° − ∠DCB 야. 둘 다 50°에서 똑같은 ∠DCB를 빼는 거니까, ∠DCB가 몇 도인지 몰라도 두 각은 같아. (∠DCB는 끝까지 구할 필요 없어!)", "두 변과 그 끼인각이 같으니까 △ACD ≡ △BCE (SAS 합동). 합동이면 대응하는 각도 같으니까 ∠ADC = ∠BEC 야. 구하려던 각이 E에서 D로 옮겨졌어 — 이제 ∠ADC만 구하면 끝이야.", "여기서 '네 점 A, D, P, E는 한 직선 위에 있다'는 조건을 써. D가 선분 AE 위에 있다는 뜻이니까 ∠ADC 와 ∠CDE 는 한 직선을 이뤄. 즉 ∠ADC + ∠CDE = 180°.", "∠CDE 를 구하자. △CDE 는 CD = CE 인 이등변삼각형이고 꼭지각이 50°니까, 밑각은 (180° − 50°) ÷ 2 = 65° 야. 즉 ∠CDE = 65°.", "∠ADC = 180° − 65° = 115°. 따라서 ∠BEC = ∠ADC = 115° 야."], "핵심": "이등변삼각형 두 개가 한 꼭짓점에서 맞물린 그림 = 그 꼭짓점을 중심으로 한 회전 합동(△ACD ≡ △BCE). 이 유형은 세 박자야. ① 끼인각이 같다는 건 '공통으로 낀 ∠DCB를 양쪽에서 빼서' 보인다 — ∠DCB 값은 몰라도 된다. ② 구하는 각을 그 자리에서 구하려 들지 말고 합동인 대응각(∠ADC)으로 옮긴다. ③ 마지막은 '한 직선 위' 조건으로 180° − (이등변삼각형 밑각). 막히면 항상 '어느 두 삼각형이 합동이지?'부터 물어봐.", "유사문제": [{"문제": "위와 같은 그림에서 CA = CB, CD = CE 이고 ∠ACB = ∠DCE = 50°, 네 점 A, D, P, E 는 한 직선 위에 있다. 이때 ∠BEA 의 크기를 구하여라.", "그림": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjI1IDYwIDM5MCA0MDgiIHdpZHRoPSIzOTAiIGhlaWdodD0iNDA4IiByb2xlPSJpbWciPjxsaW5lIHgxPSIxNzcuMiIgeTE9IjEwMC4yIiB4Mj0iNzAuMCIgeTI9IjMzMC4wIiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iNzAuMCIgeTE9IjMzMC4wIiB4Mj0iMzcwLjAiIHkyPSIzMzAuMCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjM3MC4wIiB5MT0iMzMwLjAiIHgyPSIxNzcuMiIgeTI9IjEwMC4yIiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMzcwLjAiIHkxPSIzMzAuMCIgeDI9IjIzNi43IiB5Mj0iMzA4LjciIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIzNzAuMCIgeTE9IjMzMC4wIiB4Mj0iMjY4LjAiIHkyPSI0MTguNCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjE3Ny4yIiB5MT0iMTAwLjIiIHgyPSIyNjguMCIgeTI9IjQxOC40IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iNzAuMCIgeTE9IjMzMC4wIiB4Mj0iMjY4LjAiIHkyPSI0MTguNCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjI3OC45IiB5MT0iMjEwLjYiIHgyPSIyNjguMiIgeTI9IjIxOS42IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIyMjAuMCIgeTE9IjMyMy4wIiB4Mj0iMjIwLjAiIHkyPSIzMzcuMCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMTE3LjIiIHkxPSIyMTIuMSIgeDI9IjEyOS45IiB5Mj0iMjE4LjEiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjMwNy45IiB5MT0iMzEzLjAiIHgyPSIzMDUuNyIgeTI9IjMyNi44IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIzMDEuMCIgeTE9IjMxMS45IiB4Mj0iMjk4LjgiIHkyPSIzMjUuNyIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMzE3LjEiIHkxPSIzNjYuNiIgeDI9IjMyNi4yIiB5Mj0iMzc3LjIiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjMxMS44IiB5MT0iMzcxLjIiIHgyPSIzMjAuOSIgeTI9IjM4MS44IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIyNDQuNyIgeTE9IjM2Mi4xIiB4Mj0iMjU4LjEiIHkyPSIzNTguMyIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMjQ2LjYiIHkxPSIzNjguOSIgeDI9IjI2MC4wIiB5Mj0iMzY1LjAiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTSAyNDQuMyA0MDcuOCBBIDI2IDI2IDAgMCAxIDI2MC45IDM5My40IiBmaWxsPSJub25lIiBzdHJva2U9IiNjMjQxMGMiIHN0cm9rZS13aWR0aD0iMi41Ii8+PGNpcmNsZSBjeD0iMTc3LjIiIGN5PSIxMDAuMiIgcj0iMy40IiBmaWxsPSIjMWIxZjI0Ii8+PGNpcmNsZSBjeD0iNzAuMCIgY3k9IjMzMC4wIiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIzNzAuMCIgY3k9IjMzMC4wIiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIyMzYuNyIgY3k9IjMwOC43IiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIyNjguMCIgY3k9IjQxOC40IiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIyNDIuOCIgY3k9IjMzMC4wIiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48dGV4dCB4PSIxNjkuMiIgeT0iODYuMiIgZm9udC1mYW1pbHk9IlRpbWVzIE5ldyBSb21hbixzZXJpZiIgZm9udC1zaXplPSIyNiIgZm9udC1zdHlsZT0iaXRhbGljIiBmaWxsPSIjMWIxZjI0Ij5BPC90ZXh0Pjx0ZXh0IHg9IjQwLjAiIHk9IjMzOC4wIiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkI8L3RleHQ+PHRleHQgeD0iMzgyLjAiIHk9IjMzOC4wIiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkM8L3RleHQ+PHRleHQgeD0iMjA2LjciIHk9IjMwMC43IiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkQ8L3RleHQ+PHRleHQgeD0iMjYyLjAiIHk9IjQ1Mi40IiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkU8L3RleHQ+PHRleHQgeD0iMjE2LjgiIHk9IjM1NC4wIiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPlA8L3RleHQ+PC9zdmc+", "정답": 50, "단위": "°", "풀이": ["∠BEC = 115° 인 건 본문제에서 이미 구했어. 그걸 그대로 쓰자.", "∠AEC 를 보자. A, D, E가 한 직선 위니까 E에서 A를 보는 방향은 E에서 D를 보는 방향과 똑같아. 그러니까 ∠AEC = ∠DEC 야.", "∠DEC 는 △CDE 의 밑각이야. 아까 구했듯이 65°. 즉 ∠AEC = 65°.", "A가 ∠BEC 안쪽에 있으니까 ∠BEA = ∠BEC − ∠AEC = 115° − 65° = 50° 야.", "이미 구해놓은 각에서 빼기만 하면 되는 문제였어. 새로 합동을 찾을 필요 없어. 참고로 이 50°는 회전시킨 각(∠ACB)과 똑같은 값인데, 우연이 아니라 회전 합동이라서 그래."]}, {"문제": "아래 그림에서 △ABC 는 CA = CB, ∠ACB = 90° 인 직각이등변삼각형이고, △DEC 는 CD = CE, ∠DCE = 90° 인 직각이등변삼각형이다. 네 점 A, D, P, E 가 한 직선 위에 있을 때, ∠BEC 의 크기를 구하여라.", "그림": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjI1IC0xMCAzOTAgNDQ5IiB3aWR0aD0iMzkwIiBoZWlnaHQ9IjQ0OSIgcm9sZT0iaW1nIj48bGluZSB4MT0iMzcwLjAiIHkxPSIzMC4wIiB4Mj0iNzAuMCIgeTI9IjMzMC4wIiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iNzAuMCIgeTE9IjMzMC4wIiB4Mj0iMzcwLjAiIHkyPSIzMzAuMCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjM3MC4wIiB5MT0iMzMwLjAiIHgyPSIzNzAuMCIgeTI9IjMwLjAiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIzNzAuMCIgeTE9IjMzMC4wIiB4Mj0iMzExLjQiIHkyPSIyMTguNSIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjM3MC4wIiB5MT0iMzMwLjAiIHgyPSIyNTguNSIgeTI9IjM4OC42IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMzcwLjAiIHkxPSIzMC4wIiB4Mj0iMjU4LjUiIHkyPSIzODguNiIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjcwLjAiIHkxPSIzMzAuMCIgeDI9IjI1OC41IiB5Mj0iMzg4LjYiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIzNzcuMCIgeTE9IjE4MC4wIiB4Mj0iMzYzLjAiIHkyPSIxODAuMCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMjIwLjAiIHkxPSIzMjMuMCIgeDI9IjIyMC4wIiB5Mj0iMzM3LjAiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjIxNS4xIiB5MT0iMTc1LjEiIHgyPSIyMjQuOSIgeTI9IjE4NC45IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIzNDguNSIgeTE9IjI3NC4xIiB4Mj0iMzM2LjEiIHkyPSIyODAuNiIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMzQ1LjMiIHkxPSIyNjcuOSIgeDI9IjMzMi45IiB5Mj0iMjc0LjQiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjMxNC4xIiB5MT0iMzUxLjUiIHgyPSIzMjAuNiIgeTI9IjM2My45IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIzMDcuOSIgeTE9IjM1NC43IiB4Mj0iMzE0LjQiIHkyPSIzNjcuMSIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMjc5LjMiIHkxPSIyOTguMSIgeDI9IjI5Mi42IiB5Mj0iMzAyLjMiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjI3Ny4yIiB5MT0iMzA0LjgiIHgyPSIyOTAuNiIgeTI9IjMwOS4wIiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0gMjMzLjYgMzgwLjkgQSAyNiAyNiAwIDAgMSAyODEuNSAzNzYuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzI0MTBjIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxjaXJjbGUgY3g9IjM3MC4wIiBjeT0iMzAuMCIgcj0iMy40IiBmaWxsPSIjMWIxZjI0Ii8+PGNpcmNsZSBjeD0iNzAuMCIgY3k9IjMzMC4wIiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIzNzAuMCIgY3k9IjMzMC4wIiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIzMTEuNCIgY3k9IjIxOC41IiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIyNTguNSIgY3k9IjM4OC42IiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSIyNzYuNyIgY3k9IjMzMC4wIiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48dGV4dCB4PSIzNjIuMCIgeT0iMTYuMCIgZm9udC1mYW1pbHk9IlRpbWVzIE5ldyBSb21hbixzZXJpZiIgZm9udC1zaXplPSIyNiIgZm9udC1zdHlsZT0iaXRhbGljIiBmaWxsPSIjMWIxZjI0Ij5BPC90ZXh0Pjx0ZXh0IHg9IjQwLjAiIHk9IjMzOC4wIiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkI8L3RleHQ+PHRleHQgeD0iMzgyLjAiIHk9IjMzOC4wIiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkM8L3RleHQ+PHRleHQgeD0iMjgxLjQiIHk9IjIxMC41IiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkQ8L3RleHQ+PHRleHQgeD0iMjUyLjUiIHk9IjQyMi42IiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkU8L3RleHQ+PHRleHQgeD0iMjUwLjciIHk9IjM1NC4wIiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPlA8L3RleHQ+PC9zdmc+", "정답": 135, "단위": "°", "풀이": ["꼭지각이 50°에서 90°로 바뀌었을 뿐, 푸는 순서는 글자 하나 안 바뀌어.", "CA = CB, CD = CE 는 주어졌고, ∠ACD = 90° − ∠DCB = ∠BCE 라서 끼인각도 같아. → △ACD ≡ △BCE (SAS) → ∠BEC = ∠ADC.", "달라지는 건 밑각 하나뿐이야. △CDE 는 CD = CE 인 이등변삼각형에 꼭지각 90°니까 밑각은 (180° − 90°) ÷ 2 = 45°. 즉 ∠CDE = 45°.", "∠ADC = 180° − 45° = 135°. 따라서 ∠BEC = 135° 야.", "꼭지각이 커지니까 답도 커졌지? 50°일 땐 밑각이 65°라 115°였고, 90°일 땐 밑각이 45°라 135°가 된 거야."]}, {"문제": "아래 그림에서 CA = CB, CD = CE 이고 ∠ACB = ∠DCE 이다. 네 점 A, D, P, E 가 한 직선 위에 있고 ∠BEC = 130° 일 때, ∠ACB 의 크기를 구하여라.", "그림": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjI1IC01IDM5MCA0NTMiIHdpZHRoPSIzOTAiIGhlaWdodD0iNDUzIiByb2xlPSJpbWciPjxsaW5lIHgxPSIzMTcuOSIgeTE9IjM0LjYiIHgyPSI3MC4wIiB5Mj0iMzMwLjAiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSI3MC4wIiB5MT0iMzMwLjAiIHgyPSIzNzAuMCIgeTI9IjMzMC4wIiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMzcwLjAiIHkxPSIzMzAuMCIgeDI9IjMxNy45IiB5Mj0iMzQuNiIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjM3MC4wIiB5MT0iMzMwLjAiIHgyPSIyODMuNSIgeTI9IjIyNi4zIiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMzcwLjAiIHkxPSIzMzAuMCIgeDI9IjI1Mi45IiB5Mj0iMzk3LjIiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIzMTcuOSIgeTE9IjM0LjYiIHgyPSIyNTIuOSIgeTI9IjM5Ny4yIiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iNzAuMCIgeTE9IjMzMC4wIiB4Mj0iMjUyLjkiIHkyPSIzOTcuMiIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjM1MC44IiB5MT0iMTgxLjEiIHgyPSIzMzcuMSIgeTI9IjE4My41IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIyMjAuMCIgeTE9IjMyMy4wIiB4Mj0iMjIwLjAiIHkyPSIzMzcuMCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMTg4LjYiIHkxPSIxNzcuOCIgeDI9IjE5OS4zIiB5Mj0iMTg2LjgiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjMzNC40IiB5MT0iMjc2LjQiIHgyPSIzMjMuNiIgeTI9IjI4NS4zIiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIzMjkuOSIgeTE9IjI3MS4wIiB4Mj0iMzE5LjEiIHkyPSIyODAuMCIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMzExLjAiIHkxPSIzNTUuOCIgeDI9IjMxOC4wIiB5Mj0iMzY3LjkiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjMwNC45IiB5MT0iMzU5LjMiIHgyPSIzMTEuOSIgeTI9IjM3MS40IiBzdHJva2U9IiMxYjFmMjQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSIyNjEuOSIgeTE9IjMwNy4xIiB4Mj0iMjc1LjciIHkyPSIzMDkuNSIgc3Ryb2tlPSIjMWIxZjI0IiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMjYwLjciIHkxPSIzMTQuMCIgeDI9IjI3NC41IiB5Mj0iMzE2LjQiIHN0cm9rZT0iIzFiMWYyNCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTSAyMjguNSAzODguMiBBIDI2IDI2IDAgMCAxIDI3NS40IDM4NC4yIiBmaWxsPSJub25lIiBzdHJva2U9IiNjMjQxMGMiIHN0cm9rZS13aWR0aD0iMi41Ii8+PGNpcmNsZSBjeD0iMzE3LjkiIGN5PSIzNC42IiByPSIzLjQiIGZpbGw9IiMxYjFmMjQiLz48Y2lyY2xlIGN4PSI3MC4wIiBjeT0iMzMwLjAiIHI9IjMuNCIgZmlsbD0iIzFiMWYyNCIvPjxjaXJjbGUgY3g9IjM3MC4wIiBjeT0iMzMwLjAiIHI9IjMuNCIgZmlsbD0iIzFiMWYyNCIvPjxjaXJjbGUgY3g9IjI4My41IiBjeT0iMjI2LjMiIHI9IjMuNCIgZmlsbD0iIzFiMWYyNCIvPjxjaXJjbGUgY3g9IjI1Mi45IiBjeT0iMzk3LjIiIHI9IjMuNCIgZmlsbD0iIzFiMWYyNCIvPjxjaXJjbGUgY3g9IjI2NC45IiBjeT0iMzMwLjAiIHI9IjMuNCIgZmlsbD0iIzFiMWYyNCIvPjx0ZXh0IHg9IjMwOS45IiB5PSIyMC42IiBmb250LWZhbWlseT0iVGltZXMgTmV3IFJvbWFuLHNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiMxYjFmMjQiPkE8L3RleHQ+PHRleHQgeD0iNDAuMCIgeT0iMzM4LjAiIGZvbnQtZmFtaWx5PSJUaW1lcyBOZXcgUm9tYW4sc2VyaWYiIGZvbnQtc2l6ZT0iMjYiIGZvbnQtc3R5bGU9Iml0YWxpYyIgZmlsbD0iIzFiMWYyNCI+QjwvdGV4dD48dGV4dCB4PSIzODIuMCIgeT0iMzM4LjAiIGZvbnQtZmFtaWx5PSJUaW1lcyBOZXcgUm9tYW4sc2VyaWYiIGZvbnQtc2l6ZT0iMjYiIGZvbnQtc3R5bGU9Iml0YWxpYyIgZmlsbD0iIzFiMWYyNCI+QzwvdGV4dD48dGV4dCB4PSIyNTMuNSIgeT0iMjE4LjMiIGZvbnQtZmFtaWx5PSJUaW1lcyBOZXcgUm9tYW4sc2VyaWYiIGZvbnQtc2l6ZT0iMjYiIGZvbnQtc3R5bGU9Iml0YWxpYyIgZmlsbD0iIzFiMWYyNCI+RDwvdGV4dD48dGV4dCB4PSIyNDYuOSIgeT0iNDMxLjIiIGZvbnQtZmFtaWx5PSJUaW1lcyBOZXcgUm9tYW4sc2VyaWYiIGZvbnQtc2l6ZT0iMjYiIGZvbnQtc3R5bGU9Iml0YWxpYyIgZmlsbD0iIzFiMWYyNCI+RTwvdGV4dD48dGV4dCB4PSIyMzguOSIgeT0iMzU0LjAiIGZvbnQtZmFtaWx5PSJUaW1lcyBOZXcgUm9tYW4sc2VyaWYiIGZvbnQtc2l6ZT0iMjYiIGZvbnQtc3R5bGU9Iml0YWxpYyIgZmlsbD0iIzFiMWYyNCI+UDwvdGV4dD48L3N2Zz4=", "정답": 80, "단위": "°", "풀이": ["이번엔 거꾸로 묻고 있어. 각도를 주고 꼭지각을 찾으래. 그래도 세우는 식은 똑같아 — 순서만 거꾸로 밟으면 돼.", "합동(△ACD ≡ △BCE)은 그대로 성립하니까 ∠BEC = ∠ADC = 130° 야.", "A, D, E 가 한 직선 위니까 ∠ADC + ∠CDE = 180°. 그러니까 ∠CDE = 180° − 130° = 50°.", "∠CDE 는 △CDE 의 밑각이야. 이등변삼각형은 두 밑각이 같으니까 밑각이 둘 다 50°. 삼각형 세 각의 합은 180°니까 꼭지각 ∠DCE = 180° − 50° × 2 = 80°.", "문제에서 ∠ACB = ∠DCE 라고 했으니까 ∠ACB = 80° 야.", "역방향 문제는 '아는 것부터 거꾸로 타고 올라간다'가 정석이야. ∠BEC → ∠ADC → ∠CDE → ∠DCE 순서로 한 칸씩 옮겨온 거지."]}]}];
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const K = {
+  memo: id => 'odn_tc_memo_' + id,
+  done: id => 'odn_tc_done_' + id,
+  sim: (id, i) => 'odn_tc_sim_' + id + '_' + i,
+};
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+
+let activeTags = new Set();
+let query = '';
+let hideDone = false;
+let allOpen = false;
+
+function cardHTML(p){
+  const done = store.get(K.done(p.id), false);
+  const memo = store.get(K.memo(p.id), '');
+  const tags = (p['태그'] || []).map(t => `<span class="chip">${esc(t)}</span>`).join('');
+  const fig = p['그림'] ? `<div class="fig"><img src="${p['그림']}" alt="${esc(p.id)}번 문제 그림"></div>` : '';
+  const note = p['확인필요'] ? `<div class="note">⚠ ${esc(p['확인필요'])}</div>` : '';
+  const steps = (p['풀이'] || []).map(s => `<li>${esc(s)}</li>`).join('');
+  const key = p['핵심'] ? `<div class="key"><b>기억할 것 —</b> ${esc(p['핵심'])}</div>` : '';
+  const sims = simHTML(p);
+
+  return `
+  <article class="card${done ? ' done' : ''}" data-id="${esc(p.id)}">
+    <div class="head">
+      <span class="num">${esc(p.id)}</span>
+      ${tags}
+      <span class="sp"></span>
+      <label class="chk"><input type="checkbox" class="doneBox" ${done ? 'checked' : ''}> 복습 완료</label>
+    </div>
+    <div class="body">
+      <p class="qtext">${esc(p['문제'])}</p>
+      ${fig}
+    </div>
+    ${note}
+    <div class="reveal"><button class="btn revealBtn">정답 확인</button></div>
+    <div class="sol" hidden>
+      <div class="ans">정답 &nbsp;${esc(p['정답'])}</div>
+      <ol class="steps">${steps}</ol>
+      ${key}
+    </div>
+    ${sims}
+    <div class="memo">
+      <label>왜 틀렸을까? <span class="savedSlot"></span></label>
+      <textarea class="memoBox" placeholder="예: 닮음비를 DE:EA로 착각했다">${esc(memo)}</textarea>
+    </div>
+  </article>`;
+}
+
+/* ── 유사문제 ─────────────────────────────────── */
+
+// "35", "35cm²", "35 cm2", "70/2" 모두 35로 읽는다
+function parseAnswer(raw){
+  let s = String(raw).trim().replace(/\s+/g, '');
+  if (!s) return null;
+  s = s.replace(/cm\^?2|cm²|㎠|cm/gi, '');
+  const frac = s.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+  if (frac){
+    const den = parseFloat(frac[2]);
+    return den === 0 ? null : parseFloat(frac[1]) / den;
+  }
+  return /^-?\d+(\.\d+)?$/.test(s) ? parseFloat(s) : null;
+}
+
+function simHTML(p){
+  const list = p['유사문제'] || [];
+  if (!list.length) return '';
+  const solved = list.filter((_, i) => store.get(K.sim(p.id, i), {}).ok).length;
+
+  const body = list.map((s, i) => {
+    const st = store.get(K.sim(p.id, i), {});
+    const cls = st.ok ? ' right' : (st.tries ? ' wrong' : '');
+    const mark = st.ok ? '<span class="simMark o">⭕ 맞았어</span>'
+      : (st.tries ? `<span class="simMark x">❌ ${st.tries}번 틀림</span>` : '');
+    const fig = s['그림'] ? `<div class="fig"><img src="${s['그림']}" alt="유사문제 ${i + 1} 그림"></div>` : '';
+    const steps = (s['풀이'] || []).map(x => `<li>${esc(x)}</li>`).join('');
+    return `
+    <div class="sim${cls}" data-i="${i}">
+      <div class="simTop"><span class="simNo">유사문제 ${i + 1}</span>${mark}</div>
+      <div class="body">
+        <p class="qtext">${esc(s['문제'])}</p>
+        ${fig}
+      </div>
+      <div class="simRow">
+        <input class="simIn" inputmode="decimal" placeholder="답" value="${st.last != null ? esc(st.last) : ''}">
+        <span class="simUnit">${esc(s['단위'] || '')}</span>
+        <button class="btn simCheck">확인</button>
+        <button class="btn simSolBtn">풀이 보기</button>
+      </div>
+      <div class="simSol" ${st.ok || st.tries ? '' : 'hidden'}>
+        <div class="ans">정답 &nbsp;${esc(s['정답'])} ${esc(s['단위'] || '')}</div>
+        <ol>${steps}</ol>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="simWrap">
+    <button class="btn simToggle">🔄 유사문제로 재도전 (${solved}/${list.length} 맞음)</button>
+    <div class="sims" hidden>${body}</div>
+  </div>`;
+}
+
+function match(p){
+  if (hideDone && store.get(K.done(p.id), false)) return false;
+  for (const t of activeTags) if (!(p['태그'] || []).includes(t)) return false;
+  if (!query) return true;
+  const hay = [p.id, p['문제'], p['정답'], (p['태그'] || []).join(' '), (p['풀이'] || []).join(' '),
+    (p['유사문제'] || []).map(s => s['문제']).join(' ')].join(' ').toLowerCase();
+  return hay.includes(query);
+}
+
+function render(){
+  const rows = DATA.filter(match);
+  $('#list').innerHTML = rows.length
+    ? rows.map(cardHTML).join('')
+    : '<div class="empty">조건에 맞는 문제가 없어요.</div>';
+  const total = DATA.length;
+  const doneN = DATA.filter(p => store.get(K.done(p.id), false)).length;
+  $('#count').textContent = `${rows.length}문항 표시 · 전체 ${total}문항 · 복습 완료 ${doneN}문항`;
+  if (allOpen) document.querySelectorAll('.sol').forEach(s => { s.hidden = false; });
+}
+
+function buildTagbar(){
+  const set = new Set();
+  DATA.forEach(p => (p['태그'] || []).forEach(t => set.add(t)));
+  $('#tagbar').innerHTML = [...set]
+    .map(t => `<button class="tagbtn" data-tag="${esc(t)}">${esc(t)}</button>`).join('');
+}
+
+document.addEventListener('click', e => {
+  const rv = e.target.closest('.revealBtn');
+  if (rv){
+    const sol = rv.closest('.card').querySelector('.sol');
+    sol.hidden = !sol.hidden;
+    rv.textContent = sol.hidden ? '정답 확인' : '해설 접기';
+    return;
+  }
+  const st = e.target.closest('.simToggle');
+  if (st){
+    const box = st.closest('.simWrap').querySelector('.sims');
+    box.hidden = !box.hidden;
+    return;
+  }
+  const ss = e.target.closest('.simSolBtn');
+  if (ss){
+    const sol = ss.closest('.sim').querySelector('.simSol');
+    sol.hidden = !sol.hidden;
+    ss.textContent = sol.hidden ? '풀이 보기' : '풀이 접기';
+    return;
+  }
+  const sc = e.target.closest('.simCheck');
+  if (sc){ gradeSim(sc.closest('.sim')); return; }
+
+  const tb = e.target.closest('.tagbtn');
+  if (tb){
+    const t = tb.dataset.tag;
+    activeTags.has(t) ? activeTags.delete(t) : activeTags.add(t);
+    tb.classList.toggle('on');
+    render();
+  }
+});
+
+document.addEventListener('change', e => {
+  const box = e.target.closest('.doneBox');
+  if (!box) return;
+  const card = box.closest('.card');
+  store.set(K.done(card.dataset.id), box.checked);
+  card.classList.toggle('done', box.checked);
+  render();
+});
+
+function gradeSim(el){
+  const card = el.closest('.card');
+  const pid = card.dataset.id;
+  const i = +el.dataset.i;
+  const p = DATA.find(x => String(x.id) === pid);
+  const s = p['유사문제'][i];
+  const input = el.querySelector('.simIn');
+
+  const val = parseAnswer(input.value);
+  if (val === null){
+    input.focus();
+    el.querySelector('.simTop').insertAdjacentHTML('beforeend',
+      '<span class="simMark x">숫자를 입력해줘</span>');
+    setTimeout(() => { const m = el.querySelector('.simMark.x'); if (m) m.remove(); }, 1500);
+    return;
+  }
+
+  const prev = store.get(K.sim(pid, i), {});
+  const ok = Math.abs(val - parseAnswer(s['정답'])) < 1e-6;
+  store.set(K.sim(pid, i), {
+    ok,
+    tries: ok ? (prev.tries || 0) : (prev.tries || 0) + 1,
+    last: input.value.trim(),
+  });
+  // 틀리면 풀이를 바로 펼쳐서 확인하게 한다
+  render();
+  const fresh = document.querySelector(`.card[data-id="${pid}"] .sim[data-i="${i}"]`);
+  if (fresh){
+    fresh.closest('.simWrap').querySelector('.sims').hidden = false;
+    fresh.querySelector('.simSol').hidden = false;
+    fresh.scrollIntoView({block: 'nearest'});
+  }
+}
+
+let timer;
+document.addEventListener('input', e => {
+  const m = e.target.closest('.memoBox');
+  if (!m) return;
+  const card = m.closest('.card');
+  clearTimeout(timer);
+  timer = setTimeout(() => {
+    store.set(K.memo(card.dataset.id), m.value);
+    const slot = card.querySelector('.savedSlot');
+    slot.innerHTML = '<span class="saved">저장됨</span>';
+    setTimeout(() => { slot.innerHTML = ''; }, 1200);
+  }, 400);
+});
+
+// 답 칸에서 Enter = 확인
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.classList.contains('simIn')){
+    e.preventDefault();
+    gradeSim(e.target.closest('.sim'));
+  }
+});
+
+$('#q').addEventListener('input', e => { query = e.target.value.trim().toLowerCase(); render(); });
+
+$('#toggleAll').addEventListener('click', e => {
+  allOpen = !allOpen;
+  e.target.classList.toggle('on', allOpen);
+  e.target.textContent = allOpen ? '해설 모두 접기' : '해설 모두 펼치기';
+  document.querySelectorAll('.sol').forEach(s => { s.hidden = !allOpen; });
+  document.querySelectorAll('.revealBtn').forEach(b => { b.textContent = allOpen ? '해설 접기' : '정답 확인'; });
+});
+
+$('#hideDone').addEventListener('click', e => {
+  hideDone = !hideDone;
+  e.target.classList.toggle('on', hideDone);
+  e.target.textContent = hideDone ? '완료 문항 보이기' : '복습 완료 숨기기';
+  render();
+});
+
+function printAs(cls){
+  document.body.classList.add(cls);
+  const done = () => { document.body.classList.remove(cls); window.removeEventListener('afterprint', done); };
+  window.addEventListener('afterprint', done);
+  window.print();
+}
+$('#printQ').addEventListener('click', () => printAs('print-q'));
+$('#printA').addEventListener('click', () => printAs('print-a'));
+
+buildTagbar();
+render();
+</script>
+</body>
+</html>
